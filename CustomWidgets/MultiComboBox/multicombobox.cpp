@@ -1,4 +1,4 @@
-#include "multicombobox.h"
+﻿#include "multicombobox.h"
 #include <QLineEdit>
 #include <QCheckBox>
 MultiComboBox::MultiComboBox(QWidget *parent) :
@@ -12,6 +12,8 @@ MultiComboBox::MultiComboBox(QWidget *parent) :
     QLineEdit* lineEdit = this->lineEdit();
     if (lineEdit)
         lineEdit->setReadOnly(true);
+    connect(this, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(stateChanged(int)));
 }
 
 void MultiComboBox::addItems(const QStringList &texts)
@@ -51,7 +53,7 @@ void MultiComboBox::stateChanged(int state)
     for (int i=0;i<m_listView->count();i++){
         QListWidgetItem *pItem = m_listView->item(i);
         QCheckBox *pCheckBox = dynamic_cast<QCheckBox *>(m_listView->itemWidget(pItem));
-        if (pCheckBox->isChecked())
+        if (pCheckBox && pCheckBox->isChecked())
             strSel.append(pCheckBox->text()).append(";");
     }
     lineEdit()->setText(strSel.left(strSel.size()-1));
